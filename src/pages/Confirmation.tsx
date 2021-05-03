@@ -18,7 +18,7 @@ export function Confirmation(){
     const navigation = useNavigation();
 
     function handleConfirmation(){
-        return false;
+        navigation.navigate('PlantSelect');
     }
 
     return(
