@@ -43,7 +43,6 @@ export function PlantSelect() {
 
     const [page, setPage] = useState(1);
     const [loadingMore, setLoadingMore] = useState(true);
-    const [loadedAll, setLoadedAll] = useState(true);
 
     async function fetchPlants() {
         const { data } = await api.get(`plants?_sort=name&_order=asc&_page=${page}&_limit=8`);
@@ -119,6 +118,7 @@ export function PlantSelect() {
             <View>
                 <FlatList
                     data={enviroments}
+                    keyExtractor={(item) => String(item.key)}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={styles.enviromentList}
@@ -135,6 +135,7 @@ export function PlantSelect() {
             <View style={styles.plants}>
                 <FlatList
                     data={filteredPlants}
+                    keyExtractor={(item) => String(item.id)}
                     renderItem={({ item }) => (
                         <PlantCardPrimary
                             data={item}
