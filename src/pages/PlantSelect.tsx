@@ -6,9 +6,12 @@ import {
     FlatList,
     ActivityIndicator
 } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
+import { PlantProps } from '../libs/storage';
+
 import { EnviromentButton } from '../components/EnviromentButton';
-import { Header } from '../components/Header';
 import { PlantCardPrimary } from '../components/PlantCardPrimary';
+import { Header } from '../components/Header';
 import { Load } from '../components/Load';
 
 import api from '../services/api';
@@ -21,19 +24,6 @@ interface EnviromentProps {
     key: string,
 }
 
-interface PlantProps {
-    id: string,
-    name: string,
-    about: string,
-    water_tips: string,
-    photo: string,
-    environments: [string],
-    frequency: {
-        times: number,
-        repeat_every: string
-    }
-}
-
 export function PlantSelect() {
     const [enviroments, setEnviroments] = useState<EnviromentProps[]>([]);
     const [plants, setPlants] = useState<PlantProps[]>([]);
@@ -43,6 +33,8 @@ export function PlantSelect() {
 
     const [page, setPage] = useState(1);
     const [loadingMore, setLoadingMore] = useState(true);
+
+    const navigation = useNavigation();
 
     async function fetchPlants() {
         const { data } = await api.get(`plants?_sort=name&_order=asc&_page=${page}&_limit=8`);
@@ -82,6 +74,10 @@ export function PlantSelect() {
         setLoadingMore(true);
         setPage(oldValue => oldValue + 1);
         fetchPlants();
+    }
+
+    function handlePlantSelect(plant: PlantProps) {
+        navigation.navigate('PlantSave', { plant });
     }
 
     useEffect(() => {
@@ -139,6 +135,7 @@ export function PlantSelect() {
                     renderItem={({ item }) => (
                         <PlantCardPrimary
                             data={item}
+                            onPress={() => handlePlantSelect(item)}
                         />
                     )}
                     showsVerticalScrollIndicator={false}
@@ -149,8 +146,8 @@ export function PlantSelect() {
                     }
                     ListFooterComponent={
                         loadingMore
-                        ? <ActivityIndicator color={colors.green}/>
-                        : <></>
+                            ? <ActivityIndicator color={colors.green} />
+                            : <></>
                     }
                 />
             </View>

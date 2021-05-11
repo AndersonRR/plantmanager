@@ -7,40 +7,56 @@ import {
     View
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 
 import { Button } from '../components/Button';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-export function Confirmation(){
-    const navigation = useNavigation();
+interface Params {
+    title: string,
+    subtitle: string;
+    buttonTitle: string;
+    icon: 'smile' | 'hugging_face',
+    nextScreen: string
+}
 
-    function handleConfirmation(){
-        navigation.navigate('PlantSelect');
+export function Confirmation() {
+    const navigation = useNavigation();
+    const routes = useRoute();
+
+    const {
+        title,
+        subtitle,
+        buttonTitle,
+        icon,
+        nextScreen
+    } = routes.params as Params;
+
+    function handleMoveOn() {
+        navigation.navigate(nextScreen);
     }
 
-    return(
+    return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
                 <Text style={styles.emoji}>
-                    <Emoji name="smile"/>
+                    <Emoji name={icon} />
                 </Text>
 
                 <Text style={styles.title}>
-                    Prontinho
+                    {title}
                 </Text>
 
                 <Text style={styles.subtitle}>
-                    Agora vamos começar a cuidar das suas 
-                    plantinhas com muito cuidado
+                    {subtitle}
                 </Text>
 
                 <View style={styles.footer}>
-                    <Button 
-                        title='Continuar'
-                        onPress={handleConfirmation}
+                    <Button
+                        title={buttonTitle}
+                        onPress={handleMoveOn}
                     />
                 </View>
             </View>
@@ -72,7 +88,7 @@ const styles = StyleSheet.create({
         lineHeight: 38,
         marginTop: 15
     },
-    subtitle:{
+    subtitle: {
         fontFamily: fonts.text,
         fontSize: 17,
         textAlign: 'center',
