@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -16,13 +17,13 @@ const AuthRoutes = () => {
                 inactiveTintColor: colors.heading,
                 labelPosition: 'beside-icon',
                 style: {
-                    paddingVertical: 20,
+                    paddingVertical: Platform.OS === 'ios' ? 20 : 0,
                     height: 88
                 },
             }}
         >
             <AppTab.Screen
-                name="Nova Planta"
+                name="Nova planta"
                 component={PlantSelect}
                 options={{
                     tabBarIcon: (({ size, color }) => (
@@ -36,7 +37,7 @@ const AuthRoutes = () => {
             />
 
             <AppTab.Screen
-                name="Minhas Plantas"
+                name="Minhas plantinhas"
                 component={MyPlants}
                 options={{
                     tabBarIcon: (({ size, color }) => (
